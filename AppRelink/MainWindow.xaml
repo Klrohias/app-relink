@@ -4,9 +4,53 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AppRelink"
+        d:DataContext="{d:DesignInstance Type=local:GlobalDataSource}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        WindowStartupLocation="CenterOwner"
+        Title="App:Relink" Height="300" Width="550">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Click="OnAddClicked">Add</Button>
+            <Button>Help</Button>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl
+                ItemTemplate="{DynamicResource LinkEntryTemplate}"
+                ItemsSource="{Binding AppEntries}" />
+        </ScrollViewer>
     </Grid>
+
+    <Window.Resources>
+        <DataTemplate x:Key="LinkEntryTemplate" DataType="{x:Type local:AppEntry}">
+            <Grid Margin="0,4,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    FontWeight="Heavy"
+                    Text="{Binding AppName}" />
+                <DockPanel Grid.Row="1"
+                           Grid.Column="0">
+                    <TextBlock xml:space="preserve">Count: </TextBlock>
+                    <TextBlock
+                        Text="{Binding LinkEntries.Count}" />
+                </DockPanel>
+                <Button Grid.Row="0" Grid.Column="1" Click="OnEditClicked">Edit</Button>
+                <Button Grid.Row="1" Grid.Column="1" Click="OnDeleteClicked">Delete</Button>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
 </Window>
