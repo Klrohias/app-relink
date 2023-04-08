@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AppRelink"
         d:DataContext="{d:DesignInstance Type=local:GlobalDataSource}"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         Title="App:Relink" Height="300" Width="550">
     <Grid Margin="16">
         <Grid.RowDefinitions>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AppRelink"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         Title="Add" Height="150" Width="400">
     <Grid Margin="16">
         <Grid.RowDefinitions>

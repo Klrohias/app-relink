@@ -7,7 +7,7 @@
         d:DataContext="{d:DesignInstance Type=local:AppEntry}"
         mc:Ignorable="d"
         Title="Edit Application" Height="450" Width="800"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
