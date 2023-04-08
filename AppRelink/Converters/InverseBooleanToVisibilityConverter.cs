@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace AppRelink;
+namespace AppRelink.Converters;
 
 [ValueConversion(typeof(bool), typeof(Visibility))]
 public class InverseBooleanToVisibilityConverter : IValueConverter

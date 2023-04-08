@@ -2,7 +2,7 @@
 using System.Windows;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using EnumDialogResult = System.Windows.Forms.DialogResult;
-namespace AppRelink;
+namespace AppRelink.Windows;
 
 public partial class AddLinkEntryWindow : Window
 {

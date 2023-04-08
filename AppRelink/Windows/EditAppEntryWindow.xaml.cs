@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AppRelink;
+namespace AppRelink.Windows;
 
 public partial class EditAppEntryWindow : Window
 {

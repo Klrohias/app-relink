@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Forms;
-using Microsoft.Win32;
+﻿using System.Windows;
 using MessageBox = System.Windows.MessageBox;
 
-namespace AppRelink;
+namespace AppRelink.Windows;
 
 public partial class AddAppEntryWindow : Window
 {
