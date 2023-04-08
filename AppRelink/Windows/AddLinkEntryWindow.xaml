@@ -26,8 +26,8 @@
                 <Button Grid.Column="1" Click="OnBrowseClicked" Tag="SourceDirectory">Browse</Button>
             </Grid>
         </StackPanel>
-        
-        
+
+
         <StackPanel Grid.Row="1">
             <TextBlock xml:space="preserve">Destination Directory: </TextBlock>
             <Grid>
@@ -39,7 +39,7 @@
                 <Button Grid.Column="1" Click="OnBrowseClicked" Tag="DestinationDirectory">Browse</Button>
             </Grid>
         </StackPanel>
-        
+
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal">
             <Button Click="OnCancelClicked">Cancel</Button>

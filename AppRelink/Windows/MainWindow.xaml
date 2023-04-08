@@ -7,50 +7,128 @@
         d:DataContext="{d:DesignInstance Type=local:GlobalDataSource}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="App:Relink" Height="300" Width="550">
+        Title="App:Relink" Height="300" Width="550"
+        Closed="OnWindowClosed">
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="24" />
+
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Button Click="OnAddClicked">Add</Button>
             <Button>Help</Button>
         </StackPanel>
-        <ScrollViewer Grid.Row="1"
+
+        <TextBlock Grid.Row="1" Text="Applications:"
+                   FontWeight="Heavy"
+                   Margin="0,4,0,0" />
+        <ScrollViewer Grid.Row="2"
                       VerticalScrollBarVisibility="Auto">
             <ItemsControl
                 ItemTemplate="{DynamicResource LinkEntryTemplate}"
                 ItemsSource="{Binding AppEntries}" />
         </ScrollViewer>
+
+        <TextBlock Grid.Row="3" Text="Task Queue:"
+                   FontWeight="Heavy"
+                   Margin="0,4,0,0" />
+        <ScrollViewer Grid.Row="4"
+                      VerticalScrollBarVisibility="Auto">
+            <ItemsControl
+                ItemTemplate="{DynamicResource TaskModelTemplate}"
+                ItemsSource="{Binding TaskQueue}" />
+        </ScrollViewer>
     </Grid>
 
     <Window.Resources>
         <DataTemplate x:Key="LinkEntryTemplate" DataType="{x:Type local:AppEntry}">
-            <Grid Margin="0,4,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+            <Border Style="{StaticResource ItemBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
 
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    FontWeight="Heavy"
-                    Text="{Binding AppName}" />
-                <DockPanel Grid.Row="1"
-                           Grid.Column="0">
-                    <TextBlock xml:space="preserve">Count: </TextBlock>
                     <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontWeight="Heavy"
+                        Text="{Binding AppName}" />
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        xml:space="preserve">Link Count: </TextBlock>
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
                         Text="{Binding LinkEntries.Count}" />
-                </DockPanel>
-                <Button Grid.Row="0" Grid.Column="1" Click="OnEditClicked">Edit</Button>
-                <Button Grid.Row="1" Grid.Column="1" Click="OnDeleteClicked">Delete</Button>
-            </Grid>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        xml:space="preserve">Link Count: </TextBlock>
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Text="{Binding LinkEntries.Count}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        xml:space="preserve">All Synced: </TextBlock>
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Text="{Binding LinkStatus, 
+                            Converter={StaticResource BooleanToYesNo}, 
+                            Mode=OneWay}" />
+
+                    <StackPanel
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Orientation="Horizontal">
+                        <Button Click="OnSyncAllClicked"
+                                Visibility="{Binding LinkStatus,
+                                    Converter={StaticResource InverseBoolToVis}}">
+                            Sync All
+                        </Button>
+                        <Button Click="OnEditClicked">Edit</Button>
+                        <Button Click="OnDeleteClicked">Delete</Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="TaskModelTemplate" DataType="{x:Type local:TaskModel}">
+            <Border Style="{StaticResource ItemBorder}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontWeight="Heavy"
+                        Text="Task: " />
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding Summary}" />
+                </Grid>
+            </Border>
         </DataTemplate>
     </Window.Resources>
 </Window>

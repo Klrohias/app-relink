@@ -4,12 +4,21 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using AppRelink.Utils;
 using Newtonsoft.Json;
 
 namespace AppRelink;
 
 public class AppEntry : INotifyPropertyChanged
 {
+    public AppEntry()
+    {
+        LinkEntries.CollectionChanged += (sender, args) => { OnPropertyChanged(nameof(LinkStatus)); };
+    }
+
+    #region Properties
+
     private string _appName = "";
 
     public string AppName
@@ -19,34 +28,53 @@ public class AppEntry : INotifyPropertyChanged
     }
 
     public bool LinkStatus => LinkEntries.All(x => x.LinkStatus);
-    public ObservableCollection<LinkEntry> LinkEntries { get; set; } = new();
+    public SyncObserverCollection<LinkEntry> LinkEntries { get; set; } = new();
 
-    public void Apply(Action<Action> startupAction)
+    #endregion
+
+    #region Methods
+
+    public override string ToString() => _appName;
+
+    public bool Apply()
     {
-        if (LinkStatus) return;
+        if (!GlobalDataSource.Instance.CanAddToTaskQueue(this))
+        {
+            return false;
+        }
+
         foreach (var linkEntry in LinkEntries)
         {
-            if (linkEntry is {LinkStatus: false, TaskRunning: false})
+            GlobalDataSource.Instance.AddToTaskQueue(new TaskModel()
             {
-                startupAction.Invoke(linkEntry.Apply);
-            }
+                AffectedObject = linkEntry,
+                Type = TaskType.Apply
+            });
         }
+
+        return true;
     }
 
-    public void Apply() => Apply(doIt => doIt.Invoke());
-
-    public void Recover(Action<Action> startupAction)
+    public bool Recover()
     {
+        if (!GlobalDataSource.Instance.CanAddToTaskQueue(this))
+        {
+            return false;
+        }
+
         foreach (var linkEntry in LinkEntries)
         {
-            if (linkEntry is {TaskRunning: false})
+            GlobalDataSource.Instance.AddToTaskQueue(new TaskModel()
             {
-                startupAction.Invoke(linkEntry.Recover);
-            }
+                AffectedObject = linkEntry,
+                Type = TaskType.Recover
+            });
         }
+
+        return true;
     }
 
-    public void Recover() => Recover(doIt => doIt.Invoke());
+    #endregion
 
     #region INotifyPropertyChanged Impls
 

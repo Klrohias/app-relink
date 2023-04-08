@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -14,9 +15,9 @@ public partial class EditAppEntryWindow : Window
         InitializeComponent();
     }
 
-    private async void OnDeleteClicked(object sender, RoutedEventArgs e)
+    private void OnDeleteClicked(object sender, RoutedEventArgs e)
     {
-        var entry = Utils.ResolveDataContext<LinkEntry>(sender);
+        var entry = Utils.Utils.ResolveDataContext<LinkEntry>(sender);
 
         if (MessageBox.Show("Do you want to delete this entry?", "Confirm", MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.No)
@@ -24,37 +25,37 @@ public partial class EditAppEntryWindow : Window
             return;
         }
 
-        try
+        var task = new TaskModel
         {
-            await Task.Run(() => entry.Recover());
+            Type = TaskType.Recover,
+            AffectedObject = entry,
+        };
 
+        task.OnCompleted += () =>
+        {
             _appEntry.LinkEntries.Remove(entry);
             GlobalDataSource.Save();
-        }
-        catch
+        };
+
+        if (!GlobalDataSource.Instance.AddToTaskQueue(task))
         {
-            // ignored exception
+            Utils.Utils.TaskConflictError();
         }
     }
 
     private void OnSyncClicked(object sender, RoutedEventArgs e)
     {
-        var entry = Utils.ResolveDataContext<LinkEntry>(sender);
-        new Thread(() =>
+        var entry = Utils.Utils.ResolveDataContext<LinkEntry>(sender);
+        if (!GlobalDataSource.Instance.AddToTaskQueue(new TaskModel
+            {
+                Type = TaskType.Apply,
+                AffectedObject = entry,
+            }))
         {
-            try
-            {
-                entry.Apply();
-            }
-            catch
-            {
-                // ignored exception
-            }
-        }).Start();
+            Utils.Utils.TaskConflictError();
+        }
     }
 
-    private void OnAddClicked(object sender, RoutedEventArgs e)
-    {
-        new AddLinkEntryWindow(_appEntry).ShowDialog();
-    }
+    private void OnAddClicked(object sender, RoutedEventArgs e) => new AddLinkEntryWindow(_appEntry).ShowDialog();
+    private void OnWindowClosed(object? sender, EventArgs e) => GlobalDataSource.Save();
 }

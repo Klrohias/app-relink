@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:AppRelink.Converters">
+    <Style x:Key="ItemBorder"
+           TargetType="Border">
+        <Setter Property="BorderBrush" Value="Silver" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="4" />
+    </Style>
+
+    <converters:BooleanToStringConverter x:Key="BooleanToYesNo"
+                                         ValOnTrue="Yes"
+                                         ValOnFalse="No" />
+    <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
+    <converters:BooleanToStringConverter x:Key="LinkEntryStatusString"
+                                         ValOnTrue="Synced"
+                                         ValOnFalse="Not synced"/>
+    <converters:NonEmptyStringToVisibilityConverter x:Key="NonEmptyStringToVisibilityConverter" />
+</ResourceDictionary>

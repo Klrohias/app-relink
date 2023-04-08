@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:AppRelink"
              StartupUri="/Windows/MainWindow.xaml">
     <Application.Resources>
-
+        <ResourceDictionary Source="Resources.xaml" />
     </Application.Resources>
 </Application>

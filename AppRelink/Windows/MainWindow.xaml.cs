@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace AppRelink.Windows;
@@ -15,29 +18,46 @@ public partial class MainWindow : Window
 
     private void OnEditClicked(object sender, RoutedEventArgs e)
     {
-        var entry = Utils.ResolveDataContext<AppEntry>(sender);
+        var entry = Utils.Utils.ResolveDataContext<AppEntry>(sender);
         new EditAppEntryWindow(entry).ShowDialog();
     }
 
-    private async void OnDeleteClicked(object sender, RoutedEventArgs e)
+    private void OnDeleteClicked(object sender, RoutedEventArgs e)
     {
-        var entry = Utils.ResolveDataContext<AppEntry>(sender);
+        var entry = Utils.Utils.ResolveDataContext<AppEntry>(sender);
         if (MessageBox.Show("Do you want to delete this entry?", "Confirm", MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.No)
         {
             return;
         }
 
-        try
+        if (!entry.Recover())
         {
-            await Task.Run(() => entry.Recover());
+            Utils.Utils.TaskConflictError();
+            return;
+        }
 
-            GlobalDataSource.Instance.AppEntries.Remove(entry);
-            GlobalDataSource.Save();
-        }
-        catch
+        if (!GlobalDataSource.Instance.AddToTaskQueue(new TaskModel()
+            {
+                Type = TaskType.RemoveApplication,
+                AffectedObject = entry
+            }))
         {
-            // ignored exception
+            Utils.Utils.TaskConflictError();
         }
+    }
+
+    private void OnSyncAllClicked(object sender, RoutedEventArgs e)
+    {
+        var entry = Utils.Utils.ResolveDataContext<AppEntry>(sender);
+        if (!entry.Apply())
+        {
+            Utils.Utils.TaskConflictError();
+        }
+    }
+
+    private void OnWindowClosed(object? sender, EventArgs e)
+    {
+        GlobalDataSource.Instance.StopWorkerThread();
     }
 }

@@ -8,10 +8,11 @@ namespace AppRelink;
 
 public class LinkEntry : INotifyPropertyChanged
 {
+    #region Properties
+
     private string _sourceDirectory = "";
     private string _destinationDirectory = "";
     private string _lastError = "";
-    private bool _taskRunning;
 
     public string SourceDirectory
     {
@@ -24,43 +25,41 @@ public class LinkEntry : INotifyPropertyChanged
         get => _destinationDirectory;
         set => SetValueAndNotify(ref _destinationDirectory, value);
     }
-    
+
     public string LastError
     {
         get => _lastError;
         set => SetValueAndNotify(ref _lastError, value, nameof(LastError), nameof(LinkStatus));
     }
-    
+
     public bool LinkStatus
     {
         get
         {
             if (!Directory.Exists(_destinationDirectory)) return false;
             var fileInfo = new FileInfo(_sourceDirectory);
-            return (long)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
+            return (long) fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
         }
     }
 
-    [JsonIgnore]
-    public bool TaskRunning
-    {
-        get => _taskRunning;
-        set => SetValueAndNotify(ref _taskRunning, value);
-    }
+    #endregion
+
+    #region Methods
+
+    public override string ToString() => _sourceDirectory;
 
     public void Apply()
     {
-        if (LinkStatus || TaskRunning) return;
-        TaskRunning = true;
+        if (LinkStatus) return;
         try
         {
             if (Directory.Exists(_sourceDirectory))
             {
-                Utils.MoveTree(_sourceDirectory, _destinationDirectory);
+                Utils.Utils.MoveTree(_sourceDirectory, _destinationDirectory);
             }
 
             Directory.CreateSymbolicLink(_sourceDirectory, _destinationDirectory);
-            LastError = "Success";
+            LastError = "";
         }
         catch (Exception e)
         {
@@ -69,20 +68,18 @@ public class LinkEntry : INotifyPropertyChanged
         }
         finally
         {
-            TaskRunning = false;
+            OnPropertyChanged(nameof(LinkStatus));
         }
     }
 
     public void Recover()
     {
-        if (TaskRunning) return;
-        TaskRunning = true;
         try
         {
             if (LinkStatus) Directory.Delete(_sourceDirectory);
-            if (Directory.Exists(_destinationDirectory)) 
-                Utils.MoveTree(_destinationDirectory, _sourceDirectory);
-            LastError = "Success";
+            if (Directory.Exists(_destinationDirectory))
+                Utils.Utils.MoveTree(_destinationDirectory, _sourceDirectory);
+            LastError = "";
         }
         catch (Exception e)
         {
@@ -91,9 +88,11 @@ public class LinkEntry : INotifyPropertyChanged
         }
         finally
         {
-            TaskRunning = false;
+            OnPropertyChanged(nameof(LinkStatus));
         }
     }
+
+    #endregion
 
     #region INotifyPropertyChanged Impls
 

@@ -2,6 +2,7 @@
 using System.Windows;
 using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 using EnumDialogResult = System.Windows.Forms.DialogResult;
+
 namespace AppRelink.Windows;
 
 public partial class AddLinkEntryWindow : Window
@@ -29,6 +30,12 @@ public partial class AddLinkEntryWindow : Window
             return;
         }
 
+        if (Directory.GetFileSystemEntries(Entry.DestinationDirectory).Length != 0)
+        {
+            MessageBox.Show("The destination directory must be empty.");
+            return;
+        }
+
         _appEntry.LinkEntries.Add(Entry);
         GlobalDataSource.Save();
         Close();
@@ -36,13 +43,14 @@ public partial class AddLinkEntryWindow : Window
 
     private void OnBrowseClicked(object sender, RoutedEventArgs e)
     {
-        var tag = Utils.ResolveTag<string>(sender);
+        var tag = Utils.Utils.ResolveTag<string>(sender);
+
         var dialog = new FolderBrowserDialog();
         if (dialog.ShowDialog() == EnumDialogResult.Cancel)
         {
             return;
         }
-        
+
         switch (tag)
         {
             case "SourceDirectory":
