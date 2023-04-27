@@ -9,11 +9,11 @@
     </Style>
 
     <converters:BooleanToStringConverter x:Key="BooleanToYesNo"
-                                         ValOnTrue="Yes"
-                                         ValOnFalse="No" />
+                                         ValOnTrue="是"
+                                         ValOnFalse="否" />
     <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
     <converters:BooleanToStringConverter x:Key="LinkEntryStatusString"
-                                         ValOnTrue="Synced"
-                                         ValOnFalse="Not synced"/>
+                                         ValOnTrue="已同步"
+                                         ValOnFalse="未同步" />
     <converters:NonEmptyStringToVisibilityConverter x:Key="NonEmptyStringToVisibilityConverter" />
 </ResourceDictionary>

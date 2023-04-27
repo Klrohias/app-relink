@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Newtonsoft.Json;
+using AppRelink.Utils;
 
 namespace AppRelink;
 
@@ -46,17 +46,17 @@ public class LinkEntry : INotifyPropertyChanged
 
     #region Methods
 
-    public override string ToString() => _sourceDirectory;
+    public override string ToString()
+    {
+        return _sourceDirectory;
+    }
 
     public void Apply()
     {
         if (LinkStatus) return;
         try
         {
-            if (Directory.Exists(_sourceDirectory))
-            {
-                Utils.Utils.MoveTree(_sourceDirectory, _destinationDirectory);
-            }
+            if (Directory.Exists(_sourceDirectory)) Utilities.MoveTree(_sourceDirectory, _destinationDirectory);
 
             Directory.CreateSymbolicLink(_sourceDirectory, _destinationDirectory);
             LastError = "";
@@ -78,7 +78,7 @@ public class LinkEntry : INotifyPropertyChanged
         {
             if (LinkStatus) Directory.Delete(_sourceDirectory);
             if (Directory.Exists(_destinationDirectory))
-                Utils.Utils.MoveTree(_destinationDirectory, _sourceDirectory);
+                Utilities.MoveTree(_destinationDirectory, _sourceDirectory);
             LastError = "";
         }
         catch (Exception e)
@@ -112,10 +112,7 @@ public class LinkEntry : INotifyPropertyChanged
     protected void SetValueAndNotify<T>(ref T field, T value, params string[] propertyNames)
     {
         field = value;
-        foreach (var name in propertyNames)
-        {
-            OnPropertyChanged(name);
-        }
+        foreach (var name in propertyNames) OnPropertyChanged(name);
     }
 
     #endregion

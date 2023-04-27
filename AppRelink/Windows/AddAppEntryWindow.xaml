@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:AppRelink"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
@@ -15,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBlock xml:space="preserve">Application Name: </TextBlock>
+            <TextBlock xml:space="preserve">应用程序名称: </TextBlock>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -26,8 +25,8 @@
         </StackPanel>
         <StackPanel Grid.Row="1"
                     Orientation="Horizontal">
-            <Button Click="OnCancelClicked">Cancel</Button>
-            <Button Click="OnOkClicked">Ok</Button>
+            <Button Click="OnCancelClicked">取消</Button>
+            <Button Click="OnOkClicked">确定</Button>
         </StackPanel>
     </Grid>
 </Window>

@@ -16,7 +16,7 @@ public class TaskModel
     } + " " + (AffectedObject ?? "");
 
     public event Action OnCompleted;
-    
+
     public void Run()
     {
         switch (Type)

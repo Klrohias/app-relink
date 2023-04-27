@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Windows;
-using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
+using System.Windows.Forms;
+using AppRelink.Utils;
 using EnumDialogResult = System.Windows.Forms.DialogResult;
+using MessageBox = System.Windows.MessageBox;
 
 namespace AppRelink.Windows;
 
@@ -18,7 +20,10 @@ public partial class AddLinkEntryWindow : Window
     public LinkEntry Entry { get; } = new();
 
 
-    private void OnCancelClicked(object sender, RoutedEventArgs e) => Close();
+    private void OnCancelClicked(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
 
     private void OnOkClicked(object sender, RoutedEventArgs e)
     {
@@ -26,13 +31,14 @@ public partial class AddLinkEntryWindow : Window
             || string.IsNullOrWhiteSpace(Entry.SourceDirectory)
             || !Directory.Exists(Entry.SourceDirectory))
         {
-            MessageBox.Show("The path of directory is empty or directory does not exists.");
+            MessageBox.Show("路径为空或目标路径不存在");
             return;
         }
 
-        if (Directory.GetFileSystemEntries(Entry.DestinationDirectory).Length != 0)
+        if (Directory.Exists(Entry.DestinationDirectory) &&
+            Directory.GetFileSystemEntries(Entry.DestinationDirectory).Length != 0)
         {
-            MessageBox.Show("The destination directory must be empty.");
+            MessageBox.Show("目标路径必须为空");
             return;
         }
 
@@ -43,13 +49,10 @@ public partial class AddLinkEntryWindow : Window
 
     private void OnBrowseClicked(object sender, RoutedEventArgs e)
     {
-        var tag = Utils.Utils.ResolveTag<string>(sender);
+        var tag = Utilities.ResolveTag<string>(sender);
 
         var dialog = new FolderBrowserDialog();
-        if (dialog.ShowDialog() == EnumDialogResult.Cancel)
-        {
-            return;
-        }
+        if (dialog.ShowDialog() == EnumDialogResult.Cancel) return;
 
         switch (tag)
         {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using AppRelink.Utils;
-using Newtonsoft.Json;
 
 namespace AppRelink;
 
@@ -34,42 +29,35 @@ public class AppEntry : INotifyPropertyChanged
 
     #region Methods
 
-    public override string ToString() => _appName;
+    public override string ToString()
+    {
+        return _appName;
+    }
 
     public bool Apply()
     {
-        if (!GlobalDataSource.Instance.CanAddToTaskQueue(this))
-        {
-            return false;
-        }
+        if (!GlobalDataSource.Instance.CanAddToTaskQueue(this)) return false;
 
         foreach (var linkEntry in LinkEntries)
-        {
-            GlobalDataSource.Instance.AddToTaskQueue(new TaskModel()
+            GlobalDataSource.Instance.AddToTaskQueue(new TaskModel
             {
                 AffectedObject = linkEntry,
                 Type = TaskType.Apply
             });
-        }
 
         return true;
     }
 
     public bool Recover()
     {
-        if (!GlobalDataSource.Instance.CanAddToTaskQueue(this))
-        {
-            return false;
-        }
+        if (!GlobalDataSource.Instance.CanAddToTaskQueue(this)) return false;
 
         foreach (var linkEntry in LinkEntries)
-        {
-            GlobalDataSource.Instance.AddToTaskQueue(new TaskModel()
+            GlobalDataSource.Instance.AddToTaskQueue(new TaskModel
             {
                 AffectedObject = linkEntry,
                 Type = TaskType.Recover
             });
-        }
 
         return true;
     }
@@ -94,10 +82,7 @@ public class AppEntry : INotifyPropertyChanged
     protected void SetValueAndNotify<T>(ref T field, T value, string[] propertyNames)
     {
         field = value;
-        foreach (var name in propertyNames)
-        {
-            OnPropertyChanged(name);
-        }
+        foreach (var name in propertyNames) OnPropertyChanged(name);
     }
 
     #endregion

@@ -20,11 +20,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Click="OnAddClicked">Add</Button>
-            <Button>Help</Button>
+            <Button Click="OnAddClicked">添加应用程序</Button>
         </StackPanel>
 
-        <TextBlock Grid.Row="1" Text="Applications:"
+        <TextBlock Grid.Row="1" Text="应用程序:"
                    FontWeight="Heavy"
                    Margin="0,4,0,0" />
         <ScrollViewer Grid.Row="2"
@@ -34,7 +33,7 @@
                 ItemsSource="{Binding AppEntries}" />
         </ScrollViewer>
 
-        <TextBlock Grid.Row="3" Text="Task Queue:"
+        <TextBlock Grid.Row="3" Text="任务队列:"
                    FontWeight="Heavy"
                    Margin="0,4,0,0" />
         <ScrollViewer Grid.Row="4"
@@ -69,16 +68,7 @@
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="0"
-                        xml:space="preserve">Link Count: </TextBlock>
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Text="{Binding LinkEntries.Count}" />
-
-                    <TextBlock
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        xml:space="preserve">Link Count: </TextBlock>
+                        xml:space="preserve">重定向路径的数量: </TextBlock>
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="1"
@@ -87,7 +77,7 @@
                     <TextBlock
                         Grid.Row="2"
                         Grid.Column="0"
-                        xml:space="preserve">All Synced: </TextBlock>
+                        xml:space="preserve">是否已经全部同步: </TextBlock>
                     <TextBlock
                         Grid.Row="2"
                         Grid.Column="1"
@@ -104,8 +94,8 @@
                                     Converter={StaticResource InverseBoolToVis}}">
                             Sync All
                         </Button>
-                        <Button Click="OnEditClicked">Edit</Button>
-                        <Button Click="OnDeleteClicked">Delete</Button>
+                        <Button Click="OnEditClicked">编辑</Button>
+                        <Button Click="OnDeleteClicked">还原</Button>
                     </StackPanel>
                 </Grid>
             </Border>

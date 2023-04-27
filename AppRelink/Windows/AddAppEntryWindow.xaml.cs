@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using MessageBox = System.Windows.MessageBox;
 
 namespace AppRelink.Windows;
 
@@ -12,13 +11,16 @@ public partial class AddAppEntryWindow : Window
 
     public AppEntry Entry { get; } = new();
 
-    private void OnCancelClicked(object sender, RoutedEventArgs e) => Close();
+    private void OnCancelClicked(object sender, RoutedEventArgs e)
+    {
+        Close();
+    }
 
     private void OnOkClicked(object sender, RoutedEventArgs e)
     {
         if (string.IsNullOrWhiteSpace(Entry.AppName))
         {
-            MessageBox.Show("Application Name cannot be empty.");
+            MessageBox.Show("应用程序名称不能为空");
             return;
         }
 

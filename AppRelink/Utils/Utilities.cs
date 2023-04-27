@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace AppRelink.Utils;
 
-public static class Utils
+public static class Utilities
 {
     public static void MoveTree(string srcDir, string dstDir)
     {
@@ -28,9 +28,15 @@ public static class Utils
         Directory.Delete(srcDir);
     }
 
-    public static T ResolveDataContext<T>(object sender) => (T) ((FrameworkElement) sender).DataContext;
+    public static T ResolveDataContext<T>(object sender)
+    {
+        return (T) ((FrameworkElement) sender).DataContext;
+    }
 
-    public static T ResolveTag<T>(object sender) => (T) ((FrameworkElement) sender).Tag;
+    public static T ResolveTag<T>(object sender)
+    {
+        return (T) ((FrameworkElement) sender).Tag;
+    }
 
     public static async void SaveOnFinish(Task task)
     {
@@ -48,7 +54,10 @@ public static class Utils
         }
     }
 
-    public static void TaskConflictError() => MessageBox.Show(
-        "There is a task related to this entry, please wait for the task to complete first.",
-        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    public static void TaskConflictError()
+    {
+        MessageBox.Show(
+            "There is a task related to this entry, please wait for the task to complete first.",
+            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
 }

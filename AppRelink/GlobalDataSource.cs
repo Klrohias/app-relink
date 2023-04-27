@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Threading;
 using AppRelink.Utils;
 using Newtonsoft.Json;
 
@@ -16,7 +13,7 @@ namespace AppRelink;
 public class GlobalDataSource : INotifyPropertyChanged
 {
     #region Singlelon
-    
+
     private const string Configuration = "AppConf.json";
 
     public static GlobalDataSource Instance
@@ -32,7 +29,11 @@ public class GlobalDataSource : INotifyPropertyChanged
     }
 
     private static GlobalDataSource? _instance;
-    public static void Save() => File.WriteAllText(Configuration, JsonConvert.SerializeObject(_instance));
+
+    public static void Save()
+    {
+        File.WriteAllText(Configuration, JsonConvert.SerializeObject(_instance));
+    }
 
 
     public GlobalDataSource()
@@ -40,7 +41,7 @@ public class GlobalDataSource : INotifyPropertyChanged
         var taskQueueLock = new object();
         BindingOperations.EnableCollectionSynchronization(TaskQueue, taskQueueLock);
     }
-    
+
     #endregion
 
     #region Properties
@@ -77,11 +78,20 @@ public class GlobalDataSource : INotifyPropertyChanged
         {
             if (TaskQueue.Any(x => appEntry.LinkEntries.Contains(x.AffectedObject))) return false;
         }
+
         return true;
     }
 
-    public void RunWorkerThread() => new Thread(WorkerThread).Start();
-    public void StopWorkerThread() => _running = false;
+    public void RunWorkerThread()
+    {
+        new Thread(WorkerThread).Start();
+    }
+
+    public void StopWorkerThread()
+    {
+        _running = false;
+    }
+
     private void WorkerThread()
     {
         while (_running)
@@ -95,7 +105,7 @@ public class GlobalDataSource : INotifyPropertyChanged
                     task.Run();
                 }
             }
-            
+
             Thread.Sleep(1000);
         }
     }
@@ -120,10 +130,7 @@ public class GlobalDataSource : INotifyPropertyChanged
     protected void SetValueAndNotify<T>(ref T field, T value, string[] propertyNames)
     {
         field = value;
-        foreach (var name in propertyNames)
-        {
-            OnPropertyChanged(name);
-        }
+        foreach (var name in propertyNames) OnPropertyChanged(name);
     }
 
     #endregion

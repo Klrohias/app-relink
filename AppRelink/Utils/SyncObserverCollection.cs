@@ -7,12 +7,16 @@ namespace AppRelink.Utils;
 
 public sealed class SyncObserverCollection<T> : ObservableCollection<T>
 {
+    public SyncObserverCollection(bool sync = true)
+    {
+        CollectionChanged += CollectionChangedHandler;
+        var collectionLock = new object();
+        if (sync) BindingOperations.EnableCollectionSynchronization(this, collectionLock);
+    }
+
     private void AddObserver(object? o)
     {
-        if (o is INotifyPropertyChanged typedObject)
-        {
-            typedObject.PropertyChanged += ObserverMethod;
-        }
+        if (o is INotifyPropertyChanged typedObject) typedObject.PropertyChanged += ObserverMethod;
     }
 
     private void ObserverMethod(object? sender, PropertyChangedEventArgs e)
@@ -24,36 +28,18 @@ public sealed class SyncObserverCollection<T> : ObservableCollection<T>
 
     private void RemoveObserver(object? o)
     {
-        if (o is INotifyPropertyChanged typedObject)
-        {
-            typedObject.PropertyChanged -= ObserverMethod;
-        }
-    }
-
-    public SyncObserverCollection(bool sync = true)
-    {
-        CollectionChanged += CollectionChangedHandler;
-        var collectionLock = new object();
-        if (sync) BindingOperations.EnableCollectionSynchronization(this, collectionLock);
+        if (o is INotifyPropertyChanged typedObject) typedObject.PropertyChanged -= ObserverMethod;
     }
 
     private void CollectionChangedHandler(object? sender
         , NotifyCollectionChangedEventArgs e)
     {
         if (e.NewItems != null)
-        {
             foreach (var item in e.NewItems)
-            {
                 AddObserver(item);
-            }
-        }
 
         if (e.OldItems != null)
-        {
             foreach (var item in e.OldItems)
-            {
                 RemoveObserver(item);
-            }
-        }
     }
 }

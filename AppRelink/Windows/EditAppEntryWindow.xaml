@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:AppRelink"
-        xmlns:converters="clr-namespace:AppRelink.Converters"
         d:DataContext="{d:DesignInstance Type=local:AppEntry}"
         mc:Ignorable="d"
         Title="Edit Application" Height="450" Width="800"
@@ -32,16 +31,17 @@
                        Text="{Binding AppName}"
                        FontWeight="Heavy" />
             <TextBlock Grid.Row="1" Grid.Column="0"
-                       xml:space="preserve">Application Name: </TextBlock>
+                       xml:space="preserve">应用程序名称: </TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding AppName}" />
 
             <TextBlock Grid.Row="2" Grid.Column="0"
-                       xml:space="preserve">All synced: </TextBlock>
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding LinkStatus,
+                       xml:space="preserve">已同步: </TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="1"
+                       Text="{Binding LinkStatus,
                 Converter={StaticResource LinkEntryStatusString}}" />
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Click="OnAddClicked">Add</Button>
+            <Button Click="OnAddClicked">添加新的目录重定向</Button>
         </StackPanel>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,4,0,0">
             <ItemsControl ItemsSource="{Binding LinkEntries}"
@@ -67,14 +67,14 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0"
-                               xml:space="preserve">Source: </TextBlock>
+                               xml:space="preserve">源路径: </TextBlock>
                     <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SourceDirectory}" />
 
                     <TextBlock Grid.Row="1" Grid.Column="0"
-                               xml:space="preserve">Destination: </TextBlock>
+                               xml:space="preserve">目标路径: </TextBlock>
                     <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DestinationDirectory}" />
                     <TextBlock Grid.Row="2" Grid.Column="0"
-                               xml:space="preserve">Status: </TextBlock>
+                               xml:space="preserve">状态: </TextBlock>
                     <TextBlock Grid.Row="2" Grid.Column="1"
                                Text="{Binding LinkStatus,
                                    Converter={StaticResource LinkEntryStatusString},
@@ -82,16 +82,16 @@
                     <TextBlock Grid.Row="3" Grid.Column="0"
                                xml:space="preserve"
                                Visibility="{Binding LastError,
-                                    Converter={StaticResource NonEmptyStringToVisibilityConverter}}">Last Error: </TextBlock>
+                                    Converter={StaticResource NonEmptyStringToVisibilityConverter}}">错误: </TextBlock>
                     <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastError}"
                                Visibility="{Binding LastError,
                                     Converter={StaticResource NonEmptyStringToVisibilityConverter}}" />
                     <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
                         <Button Visibility="{Binding LinkStatus, Converter={StaticResource InverseBoolToVis}}"
                                 Click="OnSyncClicked">
-                            Sync
+                            同步
                         </Button>
-                        <Button Click="OnDeleteClicked">Delete</Button>
+                        <Button Click="OnDeleteClicked">还原并移除目录重定向</Button>
                     </StackPanel>
                 </Grid>
             </Border>
