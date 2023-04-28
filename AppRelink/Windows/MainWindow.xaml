@@ -111,7 +111,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         FontWeight="Heavy"
-                        Text="Task: " />
+                        Text="任务: " />
 
                     <TextBlock
                         Grid.Row="0"

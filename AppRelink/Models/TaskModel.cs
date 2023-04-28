@@ -9,13 +9,13 @@ public class TaskModel
 
     public string Summary => Type switch
     {
-        TaskType.Apply => "Sync",
-        TaskType.Recover => "Recover",
-        TaskType.RemoveApplication => "Remove",
+        TaskType.Apply => "同步",
+        TaskType.Recover => "复原",
+        TaskType.RemoveApplication => "移除应用程序",
         _ => throw new ArgumentOutOfRangeException()
     } + " " + (AffectedObject ?? "");
 
-    public event Action OnCompleted;
+    public event Action? OnCompleted;
 
     public void Run()
     {
