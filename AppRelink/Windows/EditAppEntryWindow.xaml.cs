@@ -18,7 +18,7 @@ public partial class EditAppEntryWindow : Window
     {
         var entry = Utilities.ResolveDataContext<LinkEntry>(sender);
 
-        if (MessageBox.Show("Do you want to delete this entry?", "Confirm", MessageBoxButton.YesNo,
+        if (MessageBox.Show("确定要移除这个重定向吗?", "Confirm", MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.No)
             return;
 

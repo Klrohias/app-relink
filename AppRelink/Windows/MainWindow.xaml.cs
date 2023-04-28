@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using AppRelink.Utils;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace AppRelink.Windows;
 
@@ -26,7 +31,7 @@ public partial class MainWindow : Window
     private void OnDeleteClicked(object sender, RoutedEventArgs e)
     {
         var entry = Utilities.ResolveDataContext<AppEntry>(sender);
-        if (MessageBox.Show("Do you want to delete this entry?", "Confirm", MessageBoxButton.YesNo,
+        if (MessageBox.Show("确定要还原这个应用程序的所有重定向吗?", "Confirm", MessageBoxButton.YesNo,
                 MessageBoxImage.Question) == MessageBoxResult.No)
             return;
 

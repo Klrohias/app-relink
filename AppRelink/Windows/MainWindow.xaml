@@ -92,7 +92,7 @@
                         <Button Click="OnSyncAllClicked"
                                 Visibility="{Binding LinkStatus,
                                     Converter={StaticResource InverseBoolToVis}}">
-                            Sync All
+                            同步全部
                         </Button>
                         <Button Click="OnEditClicked">编辑</Button>
                         <Button Click="OnDeleteClicked">还原</Button>
